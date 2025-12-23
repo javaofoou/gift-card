@@ -4,7 +4,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Admin = require("../models/Admin");
 const GiftCard = require("../models/GiftCard");
-const adminAuth = require("../middleware/Auth");
+const adminAuth = require("../middleware/auth");
 const Settings = require("../models/Settings");
 
  
