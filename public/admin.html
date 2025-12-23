@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - Gift Cards</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f6f8;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1, h3 { color: #333; }
+
+    input[type="number"] {
+      padding: 8px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      width: 100%;
+      box-sizing: border-box;
+      margin-bottom: 10px;
+    }
+
+    button {
+      background-color: #e63946;
+      color: #fff;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    button:hover { background-color: #d62839; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+
+    th { background-color: #f1f3f5; }
+
+    /* Modal */
+    #modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+      animation: fadeIn 0.3s;
+    }
+
+    #modal-content {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 350px;
+      text-align: center;
+      animation: slideIn 0.3s;
+    }
+
+    #modal-content h3 {
+      margin-top: 0;
+    }
+
+    #modal-content button {
+      margin: 5px;
+      width: 45%;
+    }
+
+    @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
+    @keyframes slideIn { from { transform: translateY(-50px); opacity:0 } to { transform: translateY(0); opacity:1 } }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      th, td { padding: 8px; }
+      #modal-content { width: 95%; }
+    }
+  </style>
+</head>
+<body>
+  <h1>Admin Panel - Gift Cards</h1>
+
+  <h3>Default Balance</h3>
+  <input type="number" id="defaultBalanceInput" placeholder="Enter new default balance">
+  <button id="updateDefaultBalanceBtn">Update Default Balance</button>
+
+  <h3>All Cards</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Card Number</th>
+        <th>Balance</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="cardsTableBody"></tbody>
+  </table>
+<button id="logoutBtn">Logout</button>
+
+  <!-- Modal -->
+  <div id="modal">
+    <div id="modal-content">
+      <h3>Edit Card Balance</h3>
+      <input type="number" id="editBalanceInput" placeholder="Enter new balance">
+      <button id="saveBalanceBtn">Save</button>
+      <button id="closeModalBtn">Cancel</button>
+    </div>
+  </div>
+
+  <script>
+<<<<<<< HEAD:admin.html
+    const apiUrl = "https://gift-card-two.vercel.app/api/";
+=======
+    const apiUrl = "https://gift-card-two.vercel.app/api/admin";
+>>>>>>> 6e6edeacdc38fb5179fe7a2cb777450baa36e6a8:public/admin.html
+    let selectedCardId = null;
+    let selectedRow = null;
+
+    // Fetch all cards
+    async function fetchCards() {
+      const res = await fetch(`${apiUrl}/cards`, {
+        headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+      });
+      const cards = await res.json();
+      const tbody = document.getElementById('cardsTableBody');
+      tbody.innerHTML = '';
+      cards.forEach(card => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${card.cardNumber}</td>
+          <td>$${card.balance}</td>
+          <td>${card.cardType}</td>
+          <td><button class="editBtn">Edit</button></td>
+        `;
+        // Add click event
+        row.querySelector('.editBtn').addEventListener('click', () => openModal(card._id, card.balance, row));
+        tbody.appendChild(row);
+      });
+    }
+
+    fetchCards();
+
+    // Modal
+    const modal = document.getElementById('modal');
+    const editBalanceInput = document.getElementById('editBalanceInput');
+
+    function openModal(cardId, currentBalance, row) {
+      selectedCardId = cardId;
+      selectedRow = row;
+      editBalanceInput.value = currentBalance;
+      modal.style.display = 'flex';
+    }
+
+    document.getElementById('closeModalBtn').onclick = () => modal.style.display = 'none';
+
+    document.getElementById('saveBalanceBtn').onclick = async () => {
+      const newBalance = editBalanceInput.value;
+      const res = await fetch(`${apiUrl}/cards/${selectedCardId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        },
+        body: JSON.stringify({ balance: newBalance })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        // Update table row without reload
+        selectedRow.cells[1].textContent = `$${data.card.balance}`;
+        modal.style.display = 'none';
+      } else {
+        alert(data.message);
+      }
+    }
+
+    // Update default balance
+    document.getElementById('updateDefaultBalanceBtn').onclick = async () => {
+      const defaultBalance = document.getElementById('defaultBalanceInput').value;
+      const res = await fetch(`${apiUrl}/settings/default-balance`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        },
+        body: JSON.stringify({ defaultBalance })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        alert('Default balance updated to $' + data.defaultBalance);
+      } else {
+        alert(data.message);
+      }
+    }
+
+    // Close modal when clicking outside content
+    window.onclick = (e) => {
+      if (e.target == modal) modal.style.display = 'none';
+    }
+
+
+
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+  // Remove admin token
+  localStorage.removeItem("token");
+
+  // Optional: clear other stored data
+  localStorage.removeItem("admin");
+
+  // Redirect to admin login page
+  window.location.href = "login.html";
+});
+
+  </script>
+</body>
+</html>
