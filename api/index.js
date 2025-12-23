@@ -21,6 +21,13 @@ app.use(express.json());
 app.use("/api/user", userRoutes);
 app.use("/api/admin", adminRoutes);
 
+const mongoUri = process.env.MONGO_URI;
+
+if (!mongoUri) {
+  console.error("Error: MONGO_URI is not defined!");
+  process.exit(1); // stop server
+}
+
 // MongoDB connection
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB Connected"))
@@ -28,6 +35,8 @@ mongoose.connect(process.env.MONGO_URI)
 
 // Optional helper DB connection
 connectDB(process.env.MONGO_URI);
+
+
 
 // EXPORT — DO NOT LISTEN
 module.exports = serverless(app);
