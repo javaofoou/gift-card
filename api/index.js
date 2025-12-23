@@ -21,7 +21,7 @@ app.use(express.json());
 app.use("/api/user", userRoutes);
 app.use("/api/admin", adminRoutes);
 
-const mongoUri = process.env.MONGO_URI;
+const mongoUri = process.env.MONGO_URL;
 
 if (!mongoUri) {
   console.error("Error: MONGO_URI is not defined!");
