@@ -17,7 +17,7 @@ app.use(express.json());
 
 // Connect MongoDB
 connectDB(process.env.MONGO_URL);
-
+console.log("API hit");
 app.get("/api/test", (req, res) => {
   res.json({ success: true });
 });
