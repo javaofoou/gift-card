@@ -12,7 +12,7 @@ editBtn.addEventListener("click", async () => {
     alert("Fill all fields");
     return;
   }
-
+   API_BASE = "/api";
   const res = await fetch(
     `${API_BASE}/admin/edit-balance/${cardNumber}`,
     {
