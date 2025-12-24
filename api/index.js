@@ -24,4 +24,3 @@ app.use("/api/admin", adminRoutes);
 
 // Export for Vercel serverless
 module.exports = serverless(app);
-
