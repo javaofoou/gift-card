@@ -2,8 +2,8 @@ document.getElementById("checkBtn").addEventListener("click", async (e) => {
   e.preventDefault();
 
   const cardNumber = document.getElementById("cardNumber").value;
-   
-fetch("/api/user/check-balance", {
+   const API_BASE = window.location.origin;
+fetch(`${API_BASE}/api/user/check-balance`, {
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({
