@@ -18,6 +18,9 @@ app.use(express.json());
 // Connect MongoDB
 connectDB(process.env.MONGO_URL);
 
+app.get("/api/test", (req, res) => {
+  res.json({ success: true });
+});
 // API Routes
 app.use("/api/user", userRoutes);
 app.use("/api/admin", adminRoutes);
