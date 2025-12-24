@@ -102,10 +102,6 @@ button:hover {
 
 <script>
 // admin/script.js
-
-
-const API_BASE = "/api";
-
 // LOGIN
 document.querySelector("button")?.addEventListener("click", async () => {
   const email = document.getElementById("email").value;
@@ -113,6 +109,7 @@ document.querySelector("button")?.addEventListener("click", async () => {
   const msg = document.getElementById("loginMsg");
 
   try {
+     const API_BASE = window.location.origin;
     const res = await fetch(`${API_BASE}/admin/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
