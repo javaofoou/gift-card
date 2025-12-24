@@ -125,14 +125,15 @@
 
   <script>
 
-    const apiUrl = "/api/admin";
+    const API_BASE = window.location.origin;
+
 
     let selectedCardId = null;
     let selectedRow = null;
 
     // Fetch all cards
     async function fetchCards() {
-      const res = await fetch(`${apiUrl}/cards`, {
+      const res = await fetch(`${API_BASE}/cards`, {
         headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
       });
       const cards = await res.json();
@@ -169,7 +170,7 @@
 
     document.getElementById('saveBalanceBtn').onclick = async () => {
       const newBalance = editBalanceInput.value;
-      const res = await fetch(`${apiUrl}/cards/${selectedCardId}`, {
+      const res = await fetch(`${API_BASE}/cards/${selectedCardId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -190,7 +191,7 @@
     // Update default balance
     document.getElementById('updateDefaultBalanceBtn').onclick = async () => {
       const defaultBalance = document.getElementById('defaultBalanceInput').value;
-      const res = await fetch(`${apiUrl}/settings/default-balance`, {
+      const res = await fetch(`${API_BASE}/settings/default-balance`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
