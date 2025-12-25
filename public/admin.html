@@ -148,7 +148,36 @@
         `;
         // Add click event
         row.querySelector('.editBtn').addEventListener('click', () => openModal(card._id, card.balance, row));
-        tbody.appendChild(row);
+        tbody.appendChild(row); 
+
+    // Delete button logic
+row.querySelector('.deleteBtn').addEventListener('click', async () => {
+  const confirmDelete = confirm(`Are you sure you want to delete card ${card.cardNumber}?`);
+  if (!confirmDelete) return;
+
+  try {
+    const res = await fetch(`https://your-backend.onrender.com/api/admin/cards/${card._id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${adminToken}` // make sure you have admin token
+      }
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      alert(data.message);
+      row.remove(); // remove row from table
+    } else {
+      alert(data.message || 'Failed to delete card');
+    }
+  } catch (err) {
+    console.error(err);
+    alert('Server error. Could not delete card.');
+  }
+});
+        
       });
     }
 
@@ -210,36 +239,6 @@
     window.onclick = (e) => {
       if (e.target == modal) modal.style.display = 'none';
     }
-
-
-    // Delete button logic
-row.querySelector('.deleteBtn').addEventListener('click', async () => {
-  const confirmDelete = confirm(`Are you sure you want to delete card ${card.cardNumber}?`);
-  if (!confirmDelete) return;
-
-  try {
-    const res = await fetch(`https://your-backend.onrender.com/api/admin/cards/${card._id}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${adminToken}` // make sure you have admin token
-      }
-    });
-
-    const data = await res.json();
-
-    if (res.ok) {
-      alert(data.message);
-      row.remove(); // remove row from table
-    } else {
-      alert(data.message || 'Failed to delete card');
-    }
-  } catch (err) {
-    console.error(err);
-    alert('Server error. Could not delete card.');
-  }
-});
-
 
     document.getElementById("logoutBtn").addEventListener("click", () => {
   // Remove admin token
