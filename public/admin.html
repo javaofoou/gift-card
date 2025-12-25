@@ -156,7 +156,7 @@ row.querySelector('.deleteBtn').addEventListener('click', async () => {
   if (!confirmDelete) return;
 
   try {
-    const res = await fetch(`https://your-backend.onrender.com/api/admin/cards/${card._id}`, {
+    const res = await fetch(`${API_BASE}/api/admin/cards/${card._id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
