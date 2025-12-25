@@ -1,6 +1,6 @@
 document.getElementById("logoutBtn")?.addEventListener("click", () => {
   localStorage.removeItem("adminToken");
-  const API_BASE = "https://gift-card-backend-ecbd.onrender.com/api";
+  const API_BASE = "https://gift-card-backend-ecbd.onrender.com/api/admin";
 });
 
 const editBtn = document.getElementById("editBalanceBtn");
