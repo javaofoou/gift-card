@@ -2,7 +2,7 @@ document.getElementById("checkBtn").addEventListener("click", async (e) => {
   e.preventDefault();
 
   const cardNumber = document.getElementById("cardNumber").value;
-  const API_BASE = window.location.origin; 
+  const API_BASE ="https://gift-card-backend-ecbd.onrender.com"; 
 fetch(`${API_BASE}/api/user/check-balance`, {
   method: "POST",
   headers: { "Content-Type": "application/json" },
